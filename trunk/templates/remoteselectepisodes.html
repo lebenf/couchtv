@@ -1,0 +1,49 @@
+{%extends "base.html"%}
+{% comment %}
+Copyright 2010 Lorenzo Benfenati, Andrea Zucchelli"
+This file is part of MyMovieCollection.
+
+MyMovieCollection is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License version 3 as published by
+the Free Software Foundation.
+
+MyMovieCollection is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with MyMovieCollection. If not, see <http://www.gnu.org/licenses/>
+{% endcomment %}
+{%block title%}MMC: Insert from IMDB - Select Episodes{%endblock title%}
+{%block head%}
+<script type="text/javascript">
+	function selectSeason( id )
+	{
+	        $("INPUT[season=" + id + "][type='checkbox']").attr('checked', 1);
+	}
+	function unselectSeason( id )
+	{
+		        $("INPUT[season=" + id + "][type='checkbox']").attr('checked', 0);
+		}
+	</script>
+{%endblock head%}
+
+{%block content%}
+Select episodes to import: <br/>
+{% for season, episode in episodes.items %}
+<a onclick="selectSeason({{season}})" href = "#">Select all season {{season}} episodes </a>/ <a onclick="unselectSeason({{season}})" href = "#">Deselect season {{season}} </a><br/>
+{% endfor %}
+<form method="post">
+<input type="submit" value="Importa"/>
+<ul>
+{% for season, episode in episodes.items %}
+	{% for episodeno, title in episode.items %}	 
+<li><label for="{{season}}.{{episodeno}}"><input type="checkbox" season = "{{season}}" name="episodes" value="{{title.getID}}" id="{{season}}.{{episodeno}}" /> [{{season}}:{{episodeno}}] {{title.mytitle}} </label></li>
+	{% endfor %}
+{% endfor %}
+</ul>
+{% csrf_token %}
+<input type="submit" value="Importa"/>
+</form>
+{%endblock content%}

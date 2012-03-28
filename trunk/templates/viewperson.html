@@ -1,0 +1,54 @@
+{%extends "base.html"%}
+{% comment %}
+Copyright 2010 Lorenzo Benfenati, Andrea Zucchelli"
+This file is part of MyMovieCollection.
+
+MyMovieCollection is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License version 3 as published by
+the Free Software Foundation.
+
+MyMovieCollection is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with MyMovieCollection. If not, see <http://www.gnu.org/licenses/>
+{% endcomment %}
+{%block title%}MMC: Person - {{person.name}}{%endblock title%}
+{%block content%}
+<h1 class="title">{{person.name}}</h1>
+
+{% if person.img %}
+<img class="headshot" src="{{person.img.url}}"/>
+{%endif%}
+<br/>
+{%if person.bio%}
+<div class="item">Bio:</div>
+<div class="itemcontent bio">
+{{person.bio|linebreaks}}
+</div>
+<br/>
+{%endif%}
+{% if actor_for%}
+<div class="item">
+Characters:
+</div>
+<dl class="itemcontent characters">
+{%for p in actor_for%}
+<dd>{{p.name}} : <a href="{% url mymc.views.view_title p.title_id%}">{{p.title.title}}</a></dd>
+{%endfor%}
+</dl>
+{%endif%}
+{% if director_for%}
+<div class="item">
+Director:
+</div>
+<dl class="itemcontent director">
+{%for p in director_for%}
+<dd><a href="{% url mymc.views.view_title p.title_id%}">{{p.title.title}}</a></dd>
+{%endfor%}
+</dl>
+{%endif%}
+
+{%endblock content%}

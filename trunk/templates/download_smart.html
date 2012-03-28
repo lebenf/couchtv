@@ -1,0 +1,40 @@
+{%extends "base.html"%}
+{% comment %}
+Copyright 2010 Lorenzo Benfenati, Andrea Zucchelli"
+This file is part of MyMovieCollection.
+
+MyMovieCollection is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License version 3 as published by
+the Free Software Foundation.
+
+MyMovieCollection is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with MyMovieCollection. If not, see <http://www.gnu.org/licenses/>
+{% endcomment %}
+{%block title%}MMC: Smart Download{%endblock title%}
+{%block content%}
+{% if goodfile %}
+<div>These are the the files better suited for your device.</div>
+{%else%}
+<div>We could not identify your network connection or there aren't any files suited for your device or your connection type.</div>
+<div>Here there are all files avaible for the selected title</div>
+{%endif%}
+
+{% for file in files %}
+<h1 class="title">{{file.filename}}</h1>
+<div >Title: <a href="{% url mymc.views.view_title file.title_id %}">{{file.title}}</a></div>
+<div >Size: {{file.size}}</a></div>
+<div >Quality: {{file.quality}}</a></div>
+<div >Container: {{file.container}}</a></div>
+<div >Video codec: {{file.videocodec}}</a></div>
+<div >Audio codec: {{file.audiocodec}}</a></div>
+<div><video src="{%url mymc.views.download_file file.id%}" controls="controls"></video> </div>
+<div><a href="{%url streamer.views.stream_file file.id%}">Start streaming</a></div>
+<div><a href="{%url mymc.views.download_file file.id%}">Download</a> </div>
+{% endfor %}
+<div>If you think that this file is not suited for your device please click here {{test_speed|safe}} and reload the page.</div>
+{%endblock content%}

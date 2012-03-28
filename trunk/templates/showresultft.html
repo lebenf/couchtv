@@ -1,0 +1,39 @@
+{%extends "base.html"%}
+{% comment %}
+Copyright 2010 Lorenzo Benfenati, Andrea Zucchelli"
+This file is part of MyMovieCollection.
+
+MyMovieCollection is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License version 3 as published by
+the Free Software Foundation.
+
+MyMovieCollection is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with MyMovieCollection. If not, see <http://www.gnu.org/licenses/>
+{% endcomment %}
+{%block title%}MMC: Search Result{%endblock title%}
+{%block content%}
+
+{%if titles%}
+<p>{{titles|length}} titles found</p>
+<p>Select correct title</p>
+<form action="{%url mymc.views.link_file_title%}" method="post">
+{% csrf_token %}
+{%for t in titles%}
+<input type="radio" name="title" value="{{ t.id }}">{{t.title}}</input><br/>
+{%endfor%}
+<input type="submit" value= "Ok"/>
+</form>
+{%endif%}
+<p>Or insert new title from IMDB</p>
+<form action="{%url mymc.views.remote_search%}" method="post">
+{{form.as_p}}
+{% csrf_token %}
+<input type="submit" value="Cerca"/>
+</form>
+
+{%endblock content%}

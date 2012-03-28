@@ -1,0 +1,66 @@
+{%extends "base.html"%}
+{% comment %}
+Copyright 2010 Lorenzo Benfenati, Andrea Zucchelli"
+This file is part of MyMovieCollection.
+
+MyMovieCollection is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License version 3 as published by
+the Free Software Foundation.
+
+MyMovieCollection is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with MyMovieCollection. If not, see <http://www.gnu.org/licenses/>
+{% endcomment %}
+{%block title%}MMC: Streaming Process List{%endblock title%}
+{%block content%}
+
+{%if p_list%}
+
+<table>
+<tr><td> </td>
+<td>File name</td>
+<td>pid</td>
+<td>port</td>
+<td>command</td>
+<td>start time - end time</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+{%for s in p_list.object_list%}
+<tr>
+<td><a href="{%url streamer.views.view_process s.id%}">show</a> </td>
+<td><a href="{%url mymc.views.view_file s.file_id">{{s.file.filename}}</a></td>
+<td>{{s.pid}}</td>
+<td>{{s.port}}</td>
+<td>{{s.command}}</td>
+<td>{{s.starttime}} - {{s.endtime}}</td>
+<td><a href="{%url streamer.views.kill_process s.id%}"><b>stop now</b></a></td>
+<td><a href="{%url streamer.views.restart_process s.id%}"><b>restart</b></a></td>
+</tr>
+{%endfor%}
+</table>
+<div class="pagination">
+<span class="step-links">
+        {% if file_list.has_previous %}
+            <a href="?page={{ file_list.previous_page_number }}">Previous</a>
+        {% endif %}
+
+        <span class="current">
+            Pagina {{ file_list.number }} di {{ file_list.paginator.num_pages }}.
+        </span>
+
+        {% if file_list.has_next %}
+            <a href="?page={{ file_list.next_page_number }}">Next</a>
+        {% endif %}
+    </span>
+</div>
+{%else%}
+<div>No processes</div>
+{%endif%}
+
+
+{%endblock content%}

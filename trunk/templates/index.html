@@ -1,0 +1,46 @@
+{%extends "base.html"%}
+{% comment %}
+Copyright 2010 Lorenzo Benfenati, Andrea Zucchelli"
+This file is part of MyMovieCollection.
+
+MyMovieCollection is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License version 3 as published by
+the Free Software Foundation.
+
+MyMovieCollection is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with MyMovieCollection. If not, see <http://www.gnu.org/licenses/>
+{% endcomment %}
+{%block content%}
+<div class="section">
+{% if last_titles%}
+New titles:
+	<div class="titlelist">
+	{%for s in last_titles%}
+	{%with s.get_series_title as parent%}
+	{%if s %}<div class="titleitem {% cycle 'tcolleft' 'tcolcenter' 'tcolright' %}">
+<a href="{%url mymc.views.view_title s.id%}">
+{% if s.cover %}
+<img class="cover small" src="{{s.cover.url}}"/>
+{%else%}
+	{% if s.get_series_title.cover %}
+	<img class="cover small" src="{{s.get_series_title.cover.url}}"/>
+	{%else%}
+	<img class="cover small" src="{{MEDIA_URL}}img/Film_Reel.png"/>
+	{%endif%}
+{%endif%}</a>
+<div class="listitemtitle">{% if s.is_episode %}[ <a href="{% url mymc.views.view_title parent.id %}">{{parent.title}}</a> ] {%endif%}
+	<a href="{%url mymc.views.view_title s.id%}">{{s.title}} ({{s.year}})
+</a></div>
+</div>
+{%endif%}
+{%endwith%}
+{%endfor%}
+</div>
+{%endif%}
+</div>
+{%endblock content%}

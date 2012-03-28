@@ -1,0 +1,115 @@
+{%extends "base.html"%}
+{% comment %}
+Copyright 2010 Lorenzo Benfenati, Andrea Zucchelli"
+This file is part of MyMovieCollection.
+
+MyMovieCollection is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License version 3 as published by
+the Free Software Foundation.
+
+MyMovieCollection is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with MyMovieCollection. If not, see <http://www.gnu.org/licenses/>
+{% endcomment %}
+{%block title%}MMC: File List - Page {{ file_list.number }} of {{ file_list.paginator.num_pages }}{%endblock title%}
+{%block content%}
+
+{%if file_list%}
+<div class="pagination">
+	<span class="step-links">
+		<a alt="prima" href="?page=1;filter={{filter}}">Prima</a> <span class="spacer" /> 
+		{% if file_list.previous_ten > 0 %} 
+		<a alt="precedenti 10" href="?page={{ file_list.previous_ten }};filter={{filter}}">-10</a>
+		{%else%}
+		-10
+		{%endif%} <span class="spacer" />
+        	{% if file_list.has_previous %}
+		<a alt="precedente" href="?page={{ file_list.previous_page_number }};filter={{filter}}">-1</a>
+		{% else %}
+		-1
+        	{% endif %} <span class="spacer" />
+
+        	<span class="current">
+            	Page {{ file_list.number }} of {{ file_list.paginator.num_pages }}
+        	</span>
+
+        	<span class="spacer" /> {% if file_list.has_next %}
+		<a href="?page={{ file_list.next_page_number }};filter={{filter}}" alt="successiva">+1</a>
+		{% else %}
+		+1
+		{% endif %}
+		<span class="spacer" />{% if file_list.next_ten <= file_list.paginator.num_pages %}
+		<a alt="successive 10" href="?page={{ file_list.next_ten }};filter={{filter}}">+10</a>
+		{%else%}
+		+10
+		{%endif%}
+		<span class="spacer" /><a alt="prima" href="?page={{ file_list.paginator.num_pages }};filter={{filter}}">Ultima</a>
+</span>
+</div>
+
+<div class="itemlist">
+{%for s in file_list.object_list%}
+<div class="{% cycle 'colleft' 'colright'%}">
+<div class="listitemtitle"><a href="{%url mymc.views.view_file s.id%}">{{s.filename}}</a></div> <div class="listitemelemet"><a href="{%url mymc.views.edit 'File' s.id%}">(modifica)</a></div>
+<div class="listitemelemet">Path: {{s.path}}</div>
+<div class="listitemelemet">Storage: <a href="{%url mymc.views.view_storage s.storage.id%}">{{s.storage.name}}</a></div>
+<div class="listitemelemet">Size: {{s.size}}</div>
+<div class="listitemelemet">Title: {% if s.title %}
+	<a href="{%url mymc.views.view_title s.title.id%}">{{s.title}}</a>
+{% else %}
+<form action="{%url mymc.views.search_title%}" method="post">
+Cerca:
+{% csrf_token %}
+	{%if s.search_keys.type == 'episode' and s.search_keys.season and s.search_keys.episode%}
+	<input type="text" name="item" value="{{ s.search_keys.keys|slice:":3"|join:" "}} s{{s.search_keys.season}} e{{s.search_keys.episode}}" />
+	{% else %}
+	<input type="text" name="item" value="{{ s.search_keys.keys|slice:":3"|join:" "}}" />
+	{%endif%}
+<input type="hidden" name="fileref" value="{{ s.id }}" />
+</form>
+{% endif %}
+</div></div>
+{%endfor%}
+<div class="pagination">
+	<span class="step-links">
+		<a alt="prima" href="?page=1;filter={{filter}}">Prima</a> <span class="spacer" /> 
+		{% if file_list.previous_ten > 0 %} 
+		<a alt="precedenti 10" href="?page={{ file_list.previous_ten }};filter={{filter}}">-10</a>
+		{%else%}
+		-10
+		{%endif%} <span class="spacer" />
+        	{% if file_list.has_previous %}
+		<a alt="precedente" href="?page={{ file_list.previous_page_number }};filter={{filter}}">-1</a>
+		{% else %}
+		-1
+        	{% endif %} <span class="spacer" />
+
+        	<span class="current">
+            	Page {{ file_list.number }} of {{ file_list.paginator.num_pages }}
+        	</span>
+
+        	<span class="spacer" /> {% if file_list.has_next %}
+		<a href="?page={{ file_list.next_page_number }};filter={{filter}}" alt="successiva">+1</a>
+		{% else %}
+		+1
+		{% endif %}
+		<span class="spacer" />{% if file_list.next_ten <= file_list.paginator.num_pages %}
+		<a alt="successive 10" href="?page={{ file_list.next_ten }};filter={{filter}}">+10</a>
+		{%else%}
+		+10
+		{%endif%}
+		<span class="spacer" /><a alt="prima" href="?page={{ file_list.paginator.num_pages }};filter={{filter}}">Ultima</a>
+</span>
+</div>
+
+
+{%else%}
+<div>Non file defined </div>
+{%endif%}
+
+
+{%endblock content%}

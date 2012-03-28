@@ -1,0 +1,79 @@
+{%extends "base.html"%}
+{% comment %}
+Copyright 2010 Lorenzo Benfenati, Andrea Zucchelli"
+This file is part of MyMovieCollection.
+
+MyMovieCollection is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License version 3 as published by
+the Free Software Foundation.
+
+MyMovieCollection is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with MyMovieCollection. If not, see <http://www.gnu.org/licenses/>
+{% endcomment %}
+{%block title%}MMC: Build Channel{%endblock title%}
+{%block head%}
+<script type="text/javascript">
+	function selectSeason( id )
+	{
+	        $("INPUT[season=" + id + "][type='checkbox']").attr('checked', 1);
+	}
+	function unselectSeason( id )
+	{
+		        $("INPUT[season=" + id + "][type='checkbox']").attr('checked', 0);
+		}
+	</script>
+{%endblock head%}
+
+{%block content%}
+{%if channel %}<!-- not a new one -->
+<form action="{%url mytv.views.build_channel channel.id%}" method="post">
+	<div class="colleft">
+		<div class="content">
+		{%for t in pools%}
+		<div><b>{{t.name}}</b>: {{t.descr}} <input type="checkbox" name="addpool_{{t.id}}" value="{{t.id}}" />add?</div>
+		{%endfor%}			
+</div>
+</div>
+	<div class="colright">
+		<div class="content">
+		<input type="submit" value="Aggiorna"/>
+		{% csrf_token %}
+		<div>Name: <input type="text" name="channelname" value="{{channel.name}}"/></div>
+		<div>Descriptione: <input type="text" name="channeldescr" value="{{channel.descr}}"/></div>
+		<div>Play Mode:	<select name="playmode">
+  			{% for pm in playmode%} 
+  			<option value="{{pm.0}}" {%if channel.playmode == pm.0%}selected="selected"{%endif%}>{{pm.1}}</option>
+  			{% endfor %}
+  		</select></div>
+		<div>Start: <select name="start">
+			{%for h in startt %}
+		 	 <option value="{{h}}" {%if channel.start_string == h%}selected="selected"{%endif%}>{{h}}</option>	
+			{%endfor%}
+		</select></div>
+{%for pe in channelcontent %}
+		<div>{{pe.pool.name}} <input type="text" name="channelorder_{{pe.id}}" value="{{pe.order}}"/> <input type="checkbox" name="delete_{{pe.id}}" value="{{pe.id}}" />delete?</div>
+		{%endfor%} 
+		</div>  		
+	</div>
+	</form>
+
+{%else%}<!--  new channel -->
+	<form action="{%url mytv.views.build_channel%}" method="post">
+		<div class="title">New channel</div>			
+		<div>Name: <input type="text" name="channelname" value=""/></div>
+		<div>Description: <input type="text" name="channeldescr" value=""/></div>
+		<div>Start: <select name="start">
+			{%for h in startt %}
+		 	 <option value="{{h}}" {%if channel.start_string == h%}selected="selected"{%endif%}>{{h}}</option>	
+			{%endfor%}
+	</select></div>
+		<input type="submit" value="Inserisci"/>
+		{% csrf_token %}
+	</form>
+{%endif%}
+{%endblock content%}
