@@ -1,0 +1,128 @@
+{%extends "base.html"%}
+{% comment %}
+Copyright 2010 Lorenzo Benfenati, Andrea Zucchelli"
+This file is part of MyMovieCollection.
+
+MyMovieCollection is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License version 3 as published by
+the Free Software Foundation.
+
+MyMovieCollection is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with MyMovieCollection. If not, see <http://www.gnu.org/licenses/>
+{% endcomment %}
+{%block title%}MMC: Title List - Page {{ title_list.number }} of {{ title_list.paginator.num_pages }}{%endblock title%}
+{%block content%}
+<div class="filter">
+<form method="get" action="?page={{ title_list.number }}">
+<select name="filter">
+{% for f in filters %}
+{%if f == filter%}<option value="{{f}}" selected="selected">{{f}}</option>
+{%else%}<option value="{{f}}">{{f}}</option>
+{%endif%}
+{% endfor %}
+</select>
+<div class="genrebox">
+{%for g in genres%}
+<div class="genreitem"><input type="checkbox" name="genres" value="{{g}}" {%for sg in genre%}{%if sg == g%}checked="checked"{%endif%}{%endfor%} />{{g}} </div>
+{%endfor%}
+</div>	
+<div class="break"></div>
+<input type="submit" value="Aggiorna"></input>
+</form>
+</div>
+<div class="break"></div>
+{%if title_list%}
+<div class="pagination">
+	<span class="step-links">
+		<a alt="prima" href="?page=1;filter={{filter}}{%for g in genre%};genres={{g}}{%endfor%}">Prima</a> <span class="spacer" /> 
+		{% if title_list.previous_ten > 0 %} 
+		<a alt="precedenti 10" href="?page={{ title_list.previous_ten }};filter={{filter}}{%for g in genre%};genres={{g}}{%endfor%}">-10</a>
+		{%else%}
+		-10
+		{%endif%} <span class="spacer" />
+        	{% if title_list.has_previous %}
+		<a alt="precedente" href="?page={{ title_list.previous_page_number }};filter={{filter}}{%for g in genre%};genres={{g}}{%endfor%}">-1</a>
+		{% else %}
+		-1
+        	{% endif %} <span class="spacer" />
+
+        	<span class="current">
+            	Page {{ title_list.number }} of {{ title_list.paginator.num_pages }}
+        	</span>
+
+        	<span class="spacer" /> {% if title_list.has_next %}
+			<a href="?page={{ title_list.next_page_number }};filter={{filter}}{%for g in genre%};genres={{g}}{%endfor%}" alt="successiva">+1</a>
+		{% else %}
+		+1
+		{% endif %}
+		<span class="spacer" />{% if title_list.next_ten <= title_list.paginator.num_pages %}
+			<a alt="successive 10" href="?page={{ title_list.next_ten }};filter={{filter}}{%for g in genre%};genres={{g}}{%endfor%}">+10</a>
+		{%else%}
+		+10
+		{%endif%}
+		<span class="spacer" /><a alt="prima" href="?page={{ title_list.paginator.num_pages }};filter={{filter}}{%for g in genre%};genres={{g}}{%endfor%}">Ultima</a>
+</span>
+</div>
+<div class="break"></div>
+<div class="titlelist">
+{%for s in title_list.object_list%}
+<div class="titleitem {% cycle 'colleft' 'colright' %}">
+<a href="{%url mymc.views.view_title s.id%}">
+{% if s.cover %}
+<img class="cover" src="{{s.cover.url}}"/>
+{%else%}
+	{% if s.get_series_title.cover %}
+	<img class="cover" src="{{s.get_series_title.cover.url}}"/>
+        {%else%}
+        <img class="cover small" src="{{MEDIA_URL}}img/Film_Reel.png"/>
+	{%endif%}
+	{%endif%}</a>
+ <div class="listitemtitle"><a href="{%url mymc.views.view_title s.id%}">{{s.title}} ({{s.year}})
+</a></div>
+</div>
+{%endfor%}
+</div>
+<div class="break"></div>
+<div class="break"></div>
+<div class="pagination">
+	<span class="step-links">
+		<a alt="prima" href="?page=1;filter={{filter}}{%for g in genre%};genres={{g}}{%endfor%}">Prima</a> <span class="spacer" /> 
+		{% if title_list.previous_ten > 0 %} 
+		<a alt="precedenti 10" href="?page={{ title_list.previous_ten }};filter={{filter}}{%for g in genre%};genres={{g}}{%endfor%}">-10</a>
+		{%else%}
+		-10
+		{%endif%} <span class="spacer" />
+        	{% if title_list.has_previous %}
+		<a alt="precedente" href="?page={{ title_list.previous_page_number }};filter={{filter}}{%for g in genre%};genres={{g}}{%endfor%}">-1</a>
+		{% else %}
+		-1
+        	{% endif %} <span class="spacer" />
+
+        	<span class="current">
+            	Page {{ title_list.number }} of {{ title_list.paginator.num_pages }}
+        	</span>
+
+        	<span class="spacer" /> {% if title_list.has_next %}
+			<a href="?page={{ title_list.next_page_number }};filter={{filter}}{%for g in genre%};genres={{g}}{%endfor%}" alt="successiva">+1</a>
+		{% else %}
+		+1
+		{% endif %}
+		<span class="spacer" />{% if title_list.next_ten <= title_list.paginator.num_pages %}
+			<a alt="successive 10" href="?page={{ title_list.next_ten }};filter={{filter}}{%for g in genre%};genres={{g}}{%endfor%}">+10</a>
+		{%else%}
+		+10
+		{%endif%}
+		<span class="spacer" /><a alt="prima" href="?page={{ title_list.paginator.num_pages }};filter={{filter}}{%for g in genre%};genres={{g}}{%endfor%}">Ultima</a>
+</span>
+</div>
+{%else%}
+<div>No titles matches the query</div>
+{%endif%}
+
+
+{%endblock content%}

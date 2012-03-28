@@ -1,0 +1,59 @@
+{%extends "base.html"%}
+{% comment %}
+Copyright 2010 Lorenzo Benfenati, Andrea Zucchelli"
+This file is part of MyMovieCollection.
+
+MyMovieCollection is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License version 3 as published by
+the Free Software Foundation.
+
+MyMovieCollection is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with MyMovieCollection. If not, see <http://www.gnu.org/licenses/>
+{% endcomment %}
+{%block title%}MMC: Mass Match Files-Titles{%endblock title%}
+{%block head%}
+<script type="text/javascript">
+	function selectSeason( id )
+	{
+	        $("INPUT[season=" + id + "][type='checkbox']").attr('checked', 1);
+	}
+	function unselectSeason( id )
+	{
+		        $("INPUT[season=" + id + "][type='checkbox']").attr('checked', 0);
+		}
+	</script>
+{%endblock head%}
+
+{%block content%}
+	<form action="{%url mymc.views.mass_match_file_title%}" method="post">
+		<div class="colleft">
+			<div class="content">
+				<div >
+					Find titles:
+					{% csrf_token %}
+					<input type="text" name="titlesearch" value="{{titlesearch}}"/>
+				</div>
+			
+			{% for number, title in ntitles %}
+			<div><b>{{number}}</b>:{{title.title}} {%if title.get_episode %}S{{ title.get_season }} E{{title.get_episode}}{%endif%}</div>
+			<input type="hidden" name="t_{{number}}" value="{{title.id}}"/>
+			{% endfor %}
+				</div>
+			</div> 
+		<div class="colright">
+			<div class="content">		
+		<div>Find files: <input type="text" name="filesearch" value="{{filesearch}}"/><input type="submit" /><input type="checkbox" name="okgo" value="ok" />Save</div>
+				{% for file in files %}
+				<div>{{file.filename}} {%if file.title_id %}(<b>{{file.title_id}}</b>){%endif%}
+					<input type="text" name="f_{{file.id}}" />
+				</div>		
+				{%endfor%}
+			</div>
+		</div>
+	</form>
+{%endblock content%}

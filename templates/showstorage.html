@@ -1,0 +1,37 @@
+{%extends "base.html"%}
+{% comment %}
+Copyright 2010 Lorenzo Benfenati, Andrea Zucchelli"
+This file is part of MyMovieCollection.
+
+MyMovieCollection is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License version 3 as published by
+the Free Software Foundation.
+
+MyMovieCollection is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with MyMovieCollection. If not, see <http://www.gnu.org/licenses/>
+{% endcomment %}
+{%block title%}MMC: Storage List{%endblock title%}
+{%block content%}
+
+{%if storage_list%}
+<table>
+<tr><td>Name</td><td>Support</td><td>Size</td><td>Path</td></tr>
+{%for s in storage_list%}
+<tr>
+<td><a href="{%url mymc.views.view_storage s.id%}">{{s.name}}</a> <a href="{%url mymc.views.edit 'Storage' s.id%}">(modifica)</a></td>
+<td>{{s.support}}</td>
+<td>{{s.size}}</td>
+<td>{{s.localpath}}</td>
+{%endfor%}
+<table>
+{%else%}
+<div>No storage defined</div>
+{%endif%}
+
+
+{%endblock content%}

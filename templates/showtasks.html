@@ -1,0 +1,48 @@
+{%extends "base.html"%}
+{% comment %}
+Copyright 2010 Lorenzo Benfenati, Andrea Zucchelli"
+This file is part of MyMovieCollection.
+
+MyMovieCollection is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License version 3 as published by
+the Free Software Foundation.
+
+MyMovieCollection is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with MyMovieCollection. If not, see <http://www.gnu.org/licenses/>
+{% endcomment %}
+{%block title%}MMC: Task List{%endblock title%}
+{%block content%}
+
+
+{%if tasks%}
+<div class="tasklist">
+<table calss="tasklist">
+<tr><td>id</td><td>start:</td><td>message:</td><td>state:</td></tr>
+{% for task in tasks%}
+<tr class="{%cycle "odd" "even"%}">
+<td><a href="{%url mymc.views.poll_task task.id%}">{{task.id}}</a></td>
+<td>{{task.start_time}}</td>
+<td>{{task.message}}</td>
+<td>
+{%ifequal task.state "running"%}
+    <img src="{{MEDIA_URL}}img/cog_go.png"/>
+{%else%}{%ifequal task.state "done"%}
+    <img src="{{MEDIA_URL}}img/cog.png"/>
+{%else%}{%ifequal task.state "error"%}
+    <img src="{{MEDIA_URL}}img/cog_error.png"/>
+{%endifequal%}
+{%endifequal%}
+{%endifequal%}
+</td>
+</tr>
+{%endfor%}
+</table>
+{%endif%}
+</div>
+
+{%endblock content%}

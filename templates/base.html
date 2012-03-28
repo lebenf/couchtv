@@ -1,0 +1,95 @@
+{% comment %}
+Copyright 2010 Lorenzo Benfenati, Andrea Zucchelli"
+This file is part of MyMovieCollection.
+
+MyMovieCollection is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License version 3 as published by
+the Free Software Foundation.
+
+MyMovieCollection is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with MyMovieCollection. If not, see <http://www.gnu.org/licenses/>
+{% endcomment %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+{%block charset%}
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" /> 
+{%endblock charset%}
+{%block css%}
+<link rel="stylesheet" type="text/css" href="{{MEDIA_URL}}css/mmc.css"/>
+{%endblock css%}
+<title>{%block title%}MMC: MyMovieCollection{%endblock title%}</title>
+<script type="text/javascript" src="{{MEDIA_URL}}js/jquery.js"></script>
+{{ speed_token|safe }}
+{%block head%}
+{%endblock head%}
+</head>
+<body {{onload_speed|safe}}>
+{%block header%}
+<div class="logo"><a href="{% url mymc.views.index %}"><img class="logo" src="{{ MEDIA_URL }}img/mmc_Film_Reel.png" alt="logo"/></a></div>
+{%endblock header%}
+{%block menu%}
+<div class="menu">
+<ul>
+<li><a href="{% url mymc.views.index %}"><img src="{{MEDIA_URL}}img/house.png" alt="Home"/>Home</a></li>
+<li ><a href="{% url mymc.views.show_title %}"><img src="{{MEDIA_URL}}img/magnifier.png" alt="Title"/>Movies and series</a>
+<ul ><!--title submenu -->        
+	<li ><a href="{% url mymc.views.remote_search %}"><img src="{{MEDIA_URL}}img/magnifier.png" alt="AddIMDB"/>Insert from IMDB</a></li>
+<li ><a href="{% url mymc.views.insert 'Title' %}"><img src="{{MEDIA_URL}}img/magnifier.png" alt="AddTitle"/>Insert New</a></li>
+</ul>
+</li>
+<li><a href="{% url mytv.views.show_channel %}"><img src="{{MEDIA_URL}}img/magnifier.png" alt="MyTV"/>MyTV Channels</a>
+<ul ><!--mytv submenu -->        
+    <li ><a href="{% url mytv.views.show_pool %}"><img src="{{MEDIA_URL}}img/magnifier.png" alt="showpool"/>Pools</a></li>
+<li ><a href="{% url mytv.views.build_channel %}"><img src="{{MEDIA_URL}}img/magnifier.png" alt="new channel"/>New Channel</a></li>
+<li ><a href="{% url mytv.views.build_pool %}"><img src="{{MEDIA_URL}}img/magnifier.png" alt="new pool"/>New Pool</a></li>
+</ul>
+</li>
+<li ><a href="{% url mymc.views.show_file %}"><img src="{{MEDIA_URL}}img/drive.png" alt="File"/>Files</a>
+<ul ><!--storage submenu -->    
+    <li ><a href="{% url mymc.views.show_storage %}"><img src="{{MEDIA_URL}}img/drive.png" alt="Storage"/>Storage</a></li>
+    <li ><a href="{% url mymc.views.insert 'Storage' %}"><img src="{{MEDIA_URL}}img/drive_add.png" alt="AddStorage"/>New Storage</a></li>
+    <li ><a href="{% url mymc.views.insert 'File' %}"><img src="{{MEDIA_URL}}img/drive_add.png" alt="AddFile"/>New File</a></li>
+</ul>
+</li>
+<li ><a href="#"><img src="{{MEDIA_URL}}img/cog.png" alt="Admin"/>Admin</a>
+    <ul ><!--admin submenu -->    
+    <li ><a href="{% url mymc.views.show_tasks %}"><img src="{{MEDIA_URL}}img/cog.png" alt="Tasks"/>Background Task</a>
+    </li>
+    <li ><a href="{%url streamer.views.show_process %}"><img src="{{MEDIA_URL}}img/cog.png" alt="Tasks"/>Stream Process</a>
+    </li>
+    <li ><a href="{%url mymc.views.mass_match_file_title %}"><img src="{{MEDIA_URL}}img/cog.png" alt="Tasks"/>Mass match</a>
+    </li>
+</ul>
+</li>
+</ul>
+</div>
+<!--<li>{{ test_speed|safe }} </li>-->
+{% if user.is_authenticated %}
+    <div class="login">Utente: <span class="username">{{ user.username }}</span>
+    (<a class="normal" href="{% url mymc.views.logout_view %}">logout</a>)</div>
+{% else %}
+    <div class="login"><a class="normal" href="{% url django.contrib.auth.views.login %}?next={{ request.path }}">Login</a></div>
+{% endif %}
+<div class="search">
+<form action="{%url mymc.views.search%}" method="post">
+Cerca:
+{% csrf_token %}
+<input type="text" name="item"/>
+</form>
+</div>
+{%endblock menu%}
+<div class="content">
+{%block content%}
+{%endblock content%}
+</div>
+{%block footer%}
+{%endblock footer%}
+</body>
+</html>

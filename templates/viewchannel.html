@@ -1,0 +1,36 @@
+{%extends "base.html"%}
+{% comment %}
+Copyright 2010 Lorenzo Benfenati, Andrea Zucchelli"
+This file is part of MyMovieCollection.
+
+MyMovieCollection is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License version 3 as published by
+the Free Software Foundation.
+
+MyMovieCollection is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with MyMovieCollection. If not, see <http://www.gnu.org/licenses/>
+{% endcomment %}
+{%block title%}MMC: Channel - {{channel.name}}{%endblock title%}
+{%block content%}
+{%if channel %}<!-- -->
+		<div class="content">
+		<div class="title"> {{channel.name}}</div>
+		<div><a href="{%url mytv.views.build_channel channel.id %}">Modifica</a></div>
+		<br/>	
+		<div>Description: {{channel.descr}}</div>
+		<div>Play mode: {%if channel.playmode == 'RR'%}Random{%endif%}{%if channel.playmode == 'AS'%}Alternate{%endif%}{%if channel.playmode == 'AR'%}Alternate Continuous{%endif%}
+  		</div>
+		{%for pe in channelcontent %}
+		<div> N.{{pe.order}} {{pe.pool.name}}: {{pe.pool.descr}}</div>
+		{%endfor%} 
+		</div>  		
+
+{%else%}<!-- no channel -->
+		<div>The channel doesn't exists</div>
+{%endif%}
+{%endblock content%}

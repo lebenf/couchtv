@@ -1,0 +1,185 @@
+{%extends "base.html"%}
+{% comment %}
+Copyright 2010 Lorenzo Benfenati, Andrea Zucchelli"
+This file is part of MyMovieCollection.
+
+MyMovieCollection is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License version 3 as published by
+the Free Software Foundation.
+
+MyMovieCollection is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with MyMovieCollection. If not, see <http://www.gnu.org/licenses/>
+{% endcomment %}
+{%block title%}MMC: Title - {{title.title}}{%endblock title%}
+{%block head%}
+<script>
+$(document).ready(function() {
+	   // do stuff when DOM is ready
+	
+$("li.season_list").click(function(){
+$(this).children("ul").toggle();
+	
+}
+		);
+$("li.season_list").children("ul").toggle();
+});
+
+</script>
+{%endblock head%}
+{%block content%}
+<h1 class="title">{{title.title}}</h1>
+<h2 class="subtitle">AKA: {% for a in akas %}{{a.akatitle}}, {%endfor%}</h2>
+{%if relations_season%}
+<div class="rightcol"><a href={%url mymc.views.remote_add_episode title.id%}>Add episode</a></div>
+<div class="rightcol"><a href={%url mytv.views.series_to_pool title.id%}>Transform in Pool</a></div>
+{%endif%}
+<div class="rightcol"><a href={%url mymc.views.insert 'Relation' %}?parent_id={{ title.id }}>Add elements (episodi, etc...)</a></div>
+<div class="rightcol"><a href={%url mymc.views.insert 'Relation' %}?title_id={{ title.id }}>Add to a playlist</a></div>
+<div class="rightcol"><a href={%url mymc.views.edit 'Title' title.id%}>Modify</a></div>
+<div class="rightcol"
+><form action="{%url mymc.views.search_file_v%}" method="post"> 
+Search file:
+{% csrf_token %}
+<input type="text" name="item" value="{{title.title}}" />
+<input type="hidden" name="titleref" value="{{ title.id }}" />
+</form> </div>
+
+{% if title.cover %}
+    <img class="cover" src="{{title.cover.url}}"/>
+{%else%}
+        {% if title.get_series_title.cover %}
+        <img class="cover" src="{{title.get_series_title.cover.url}}"/>
+        {%else%}
+        <img class="cover small" src="{{MEDIA_URL}}img/Film_Reel.png"/>
+        {%endif%}
+{%endif%}
+<br/>
+<div class="itemcontent autowidth">
+<div class="listitem"><span class="key">Ratings:</span> <span class="value" >{{title.rating}}</span></div>
+<div class="listitem"><span class="key">User ratings:</span> <span class="value" >
+{% if user.is_authenticated %}
+   <form action="{%url mymc.views.push_user_title%}" method="post"> 
+{% csrf_token %}
+<input type="text" name="rating" size="10" value="{{userdata.0.rating}}" />
+<input type="hidden" name="title" value="{{ title.id }}" />
+</form>
+{% else %}
+    <div class="login"><a href="{% url django.contrib.auth.views.login %}?next={{ request.path }}">Login to see your vote</a></div>
+{% endif %}
+</span></div>
+<div class="listitem"><span class="key">Year:</span> <span class="value" >{{title.year}}</span></div>
+<div class="listitem"><span class="key">Genre:</span> <span class="value" >
+{% for l in title.get_genres%}
+<a href="{%url mymc.views.show_title %}?genres={{l.genre.name}}">{{l.genre.name}}</a>; 
+{%endfor%}
+</span></div>
+<div class="listitem"><span class="key">Language:</span> <span class="value" >
+{% for l in title.get_languages%}
+{{l.language.name}}; 
+{%endfor%}
+</span></div>
+<div class="listitem"><span class="key">Countries:</span> <span class="value" >
+{% for l in title.get_countries%}
+{{l.country.name}}; 
+{%endfor%}
+</span></div>
+</div>
+<div class="item"">File associati</div> 
+	<div class="itemcontent">  
+		<div><a href="{%url speedtest.views.download_smart title.id %}">Smart Play</a></div>	
+	{%for f in title.get_files%}
+	<div><a href="{% url mymc.views.view_file f.id %}">{{f.filename}}</a> - <a href="{%url mymc.views.playlist f.id%}" >Play</a> - <a href="{%url streamer.views.stream_file f.id%}" >Start streaming</a></div>
+	{%endfor%}
+	</div>
+{% if title.type != 'tv series' %}
+	<div class="item">Regia</div>
+	<div class="itemcontent">
+	<ul>
+	{% for d in directors%}
+	   <li><a href="{% url mymc.views.view_person d.person_id%}">{{d.person.name}}</a></li>	
+	{%endfor%}
+	</ul>
+	</div>
+	<br/>
+{%endif%}
+{%if title.plot%}
+	<div class="item">Descrizione</div>
+	<div class="itemcontent plot">
+	{{title.plot|linebreaks}}
+	</div>
+	<br/>
+{%endif%}
+<div class="item">Cast</div>
+<dl class="itemcontent actors">
+{% for a in actors%}
+    <dd>{{a.name}} : <a href="{% url mymc.views.view_person a.person_id%}">{{a.person.name}}</a></dd>	
+{%endfor%}
+</dl>
+{%if relations_member%}
+	{%for r in relations_member%}
+		{% if r.relation == 'T' %}
+		  <div class="item">Serie</div><div class="itemcontent"> <a href="{% url mymc.views.view_title r.parent.id %}">{{r.parent.title}}</a></div>
+		{%endif%}
+	{%endfor%}
+{%endif%}
+{%if relations_parent%}
+	<br/>
+	<div class="item"">Episodes</div> 
+{%if relations_season%}
+<div class="itemcontent nav">  
+    <ul>
+    {%for s, slist in relations_season.items%}
+        <li class="season_list">Season {{ s }}
+            <ul>
+                {% for i in slist|dictsort:"tvepisode" %}
+		<li><a href="{% url mymc.views.view_title i.title.id %}" class="daddy">{%if i.tvepisode%}S{{i.tvseason}}E{{i.tvepisode}} {%endif%}{{i.title.title}}</a></li>
+                {% endfor%}
+            </ul>
+        </li>
+    {%endfor%}  
+    </ul>
+</div>
+{%else%}    
+<div class="itemcontent">  
+  {%for r in relations_parent%}
+<div><a href="{% url mymc.views.view_title r.title.id %}">{{r.title.title}}</a></div>
+  {%endfor%}
+</div>
+{%endif%}
+{%endif%}
+
+	<div class="item">Note</div>
+	<div class="itemcontent autowidth">
+{% if user.is_authenticated %}
+   <form action="{%url mymc.views.push_user_title%}" method="post"> 
+{% csrf_token %}
+<textarea rows="5" cols="50" name="note">{{userdata.0.note}}</textarea> 
+<input type="hidden" name="title" value="{{ title.id }}" />
+<input type="submit">
+</form>
+{% else %}
+    <div class="login"><a href="{% url django.contrib.auth.views.login %}?next={{ request.path }}">Login per vedere le tue note</a></div>
+{% endif %}
+</div>
+	<div class="item">Search Tags</div>
+	<div class="itemcontent autowidth">
+{% if user.is_authenticated %}
+   <form action="{%url mymc.views.push_user_title%}" method="post"> 
+{% csrf_token %}
+<textarea rows="1" cols="50" name="tag">
+{% for t in userdata.0.tag.all %}{{t.tag}} {% endfor %}
+</textarea> 
+<input type="hidden" name="title" value="{{ title.id }}" />
+<input type="submit">
+</form>
+{% else %}
+    <div class="login"><a href="{% url django.contrib.auth.views.login %}?next={{ request.path }}">Login per vedere le tue note</a></div>
+{% endif %}
+</div>
+
+{%endblock content%}

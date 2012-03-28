@@ -1,0 +1,73 @@
+{%extends "base.html"%}
+{% comment %}
+Copyright 2010 Lorenzo Benfenati, Andrea Zucchelli"
+This file is part of MyMovieCollection.
+
+MyMovieCollection is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License version 3 as published by
+the Free Software Foundation.
+
+MyMovieCollection is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with MyMovieCollection. If not, see <http://www.gnu.org/licenses/>
+{% endcomment %}
+{%block title%}MMC: Build Pool{%endblock title%}
+{%block head%}
+<script type="text/javascript">
+	function selectSeason( id )
+	{
+	        $("INPUT[season=" + id + "][type='checkbox']").attr('checked', 1);
+	}
+	function unselectSeason( id )
+	{
+		        $("INPUT[season=" + id + "][type='checkbox']").attr('checked', 0);
+		}
+	</script>
+{%endblock head%}
+
+{%block content%}
+{%if pool %}<!-- not a new one -->
+<form action="{%url mytv.views.build_pool pool.id%}" method="post">
+	<div class="colleft">
+		<div class="content">
+			<div> Search: <input type="text" name="searchtoadd" value=""/></div>
+		{%for t in titles%}
+		<div>{{t.title}} <input type="checkbox" name="addtitle_{{t.id}}" value="{{t.id}}" />add?</div>
+		{%endfor%}			
+		{%for f in files%}
+		<div>{{f.filename}} <input type="checkbox" name="addfile_{{f.id}}" value="{{f.id}}" />add?</div>
+		{%endfor%}	
+</div>
+</div>
+	<div class="colright">
+		<div class="content">
+		<input type="submit" value="Aggiorna"/>
+		{% csrf_token %}
+		<div>Name: <input type="text" name="poolname" value="{{pool.name}}"/></div>
+		<div>Description: <input type="text" name="pooldescr" value="{{pool.descr}}"/></div>
+		<div>Play Mode:
+		<select name="playmode">
+  			<option value="R" {%if pool.playmode == 'R'%}selected="selected"{%endif%}>Random</option>
+  			<option value="S" {%if pool.playmode == 'S'%}selected="selected"{%endif%}>Sequence</option>
+  		</select></div>
+		{%for pe in poolcontent %}
+		<div>{%if pe.title%}{{pe.title.title}}{%else%}{{pe.file.filename}}{%endif%} <input type="text" name="poolorder_{{pe.id}}" value="{{pe.order}}"/> <input type="checkbox" name="delete_{{pe.id}}" value="{{pe.id}}" />delete?</div>
+		{%endfor%} 
+		</div>  		
+	</div>
+	</form>
+
+{%else%}<!--  new pool -->
+	<form action="{%url mytv.views.build_pool%}" method="post">
+		<div class="title">New pool</div>			
+		<div>Name: <input type="text" name="poolname" value=""/></div>
+		<div>Description <input type="text" name="pooldescr" value=""/></div>
+		<input type="submit" value="Inserisci"/>
+		{% csrf_token %}
+	</form>
+{%endif%}
+{%endblock content%}
