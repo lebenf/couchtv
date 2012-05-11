@@ -25,9 +25,9 @@ from django.shortcuts import render_to_response,get_object_or_404
 from django.template import RequestContext
 from django.http import Http404
 
-from mmc.speedtest.models import *
-from mmc.speedtest.addons import DWNSIZE
-from mmc.mymc.models import File, Title
+from couchtv.speedtest.models import *
+from couchtv.speedtest.addons import DWNSIZE
+from couchtv.mymc.models import File, Title
 import addons
 
 

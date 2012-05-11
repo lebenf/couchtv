@@ -19,7 +19,7 @@ import re
 
 from django.db import models
 
-from mmc.mymc.models import File
+from couchtv.mymc.models import File
 
 class StreamProcess(models.Model):
     file = models.ForeignKey (File)

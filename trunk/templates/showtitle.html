@@ -83,7 +83,7 @@ along with MyMovieCollection. If not, see <http://www.gnu.org/licenses/>
 	{%endif%}
 	{%endif%}</a>
  <div class="listitemtitle"><a href="{%url mymc.views.view_title s.id%}">{{s.title}} ({{s.year}})
-</a></div>
+ </a> <a href="{%url mymc.views.update_title s.id%}?next={{ request.path }}">(Update)</a> </div>
 </div>
 {%endfor%}
 </div>

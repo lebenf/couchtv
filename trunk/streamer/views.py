@@ -22,11 +22,11 @@ from django.shortcuts import render_to_response,get_object_or_404
 from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.template import RequestContext
 
-from mmc.mymc.models import File
-from mmc.streamer.runcommand import RunCommand
-from mmc.settings import *
-from mmc.mymc.views import view_file
-from mmc.streamer.models import StreamProcess
+from couchtv.mymc.models import File
+from couchtv.streamer.runcommand import RunCommand
+from couchtv.settings import *
+from couchtv.mymc.views import view_file
+from couchtv.streamer.models import StreamProcess
 
 
 

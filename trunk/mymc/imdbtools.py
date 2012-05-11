@@ -259,7 +259,39 @@ class IMDBtools:
             self._insertCountry(t, sresult['country'])
         if 'genres' in sresult.keys():
             self._insertGenre(t, sresult['genres'])
+        return t
 
+    def updateTitle (self, titleid):
+        try:
+            t = Title.objects.get(id=titleid)
+        except:
+            return
+        if t.source == 'I':
+            sresult = self.con.get_movie(t.externalid) 
+        else:
+            return 
+        rerun = re.compile("\d+")
+        runtime = listdilemma(sresult.get('runtimes',None))
+        if runtime:
+            allrun = rerun.findall(runtime)
+            runtime = allrun[0] if allrun else runtime
+        #title = sresult.get('episode title',"").encode('utf-8') if not( sresult.get('episode title',"") and sresult['kind']=='episode') else sresult.get('title',"??").encode('utf-8')
+        title = sresult.get('title',"??").encode('utf-8')
+        t.title = title
+        t.year = listdilemma(sresult.get('year', None))
+        t.type = listdilemma(sresult.get('kind', None))
+        t.titlesort = listdilemma(sresult.get('canonical title', None))
+        #aka = "; ".join(sresult.get('akas', None)),
+        t.source = 'I'
+        t.plot = listdilemma(sresult.get('plot', None))
+        t.plotoutline = sresult.get('plot outline', None)
+        t.rating = floatdilemma(listdilemma(sresult.get('rating', None)))
+        t.runtime = runtime
+        t.color = listdilemma(sresult.get('color info', None)) 
+        try:
+            t.save()
+        except :
+            return 
         return t
 
 #    def __savecover (self, url, cover, name):

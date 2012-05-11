@@ -20,7 +20,7 @@ from datetime import *
 
 from django.db.models import Avg
 
-from mmc.speedtest.models import *
+from couchtv.speedtest.models import *
 
 DWNSIZE = 500*1024
 

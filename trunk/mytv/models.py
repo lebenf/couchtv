@@ -22,8 +22,8 @@ from datetime import *
 from django.db import models
 from django.db.models import Avg, Max, Min, Count, Variance
 
-from mmc.mymc.models import File, Title
-from mmc.streamer.models import StreamProcess
+from couchtv.mymc.models import File, Title
+from couchtv.streamer.models import StreamProcess
 
 
 class Pool (models.Model):
