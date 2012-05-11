@@ -32,7 +32,7 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': here('mmc.sqlite'),                      # Or path to database file if using sqlite3.
+        'NAME': here('couchtv.sqlite'),                      # Or path to database file if using sqlite3.
         'USER': '',                      # Not used with sqlite3.
         'PASSWORD': '',                  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
@@ -96,7 +96,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.locale.LocaleMiddleware',
     )
 
-ROOT_URLCONF = 'mmc.urls'
+ROOT_URLCONF = 'couchtv.urls'
 
 TEMPLATE_DIRS = (
     here('templates'),
@@ -111,7 +111,7 @@ TEMPLATE_CONTEXT_PROCESSORS=("django.contrib.auth.context_processors.auth",
 "django.core.context_processors.media",
 "django.contrib.messages.context_processors.messages",
 "django.core.context_processors.request",
-'mmc.speedtest.addons.speedtoken',
+'couchtv.speedtest.addons.speedtoken',
 )
 
 INSTALLED_APPS = (
@@ -122,10 +122,10 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
-    'mmc.mymc',
-    'mmc.speedtest',
-    'mmc.streamer',
-    'mmc.mytv',
+    'couchtv.mymc',
+    'couchtv.speedtest',
+    'couchtv.streamer',
+    'couchtv.mytv',
     )
 
 

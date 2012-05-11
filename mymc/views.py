@@ -95,6 +95,25 @@ def import_movie(task,movie, request = None):
     task.save()
     return
 
+def update_movie(task,titleid, request = None):
+    task.pid=os.getpid()
+    task.state="running"
+    task.save()
+    remote=imdbtools.IMDBtools(source = IMDB_ACCESS_SYSTEM,
+                                    dburi = LOCAL_IMDB_URI)
+    try:
+        mm = remote.updateTitle(titleid)
+    except Exception,e:
+        task.state='error'
+        task.message+=str(sys.exc_info())+str(e)
+    else:
+        task.state="done"
+    if request.session.has_key('fileref'):
+        __filetitle(request.session['fileref'], mm.id)
+        del(request.session['fileref'])    
+    task.save()
+    return
+
 def import_episodes(task,series,episodes, request = None):
     task.pid=os.getpid()
     task.state="running"
@@ -172,6 +191,25 @@ def remote_select(request):
     data={'form':f,'error':error}
     return render_to_response('remoteselect.html',data,context_instance=RequestContext(request))
 
+
+@login_required
+def update_title(request,title_id):
+    redirect_to = request.REQUEST.get('next', '')
+    if 'I'=='I':
+        task=models.RunningTask()
+        task.state="init"
+        task.message="Updating movie id:%s from IMDb"%(title_id)
+        task.session=request.COOKIES['sessionid']
+        task.host="localhost"
+        task.pid=0
+        task.save()
+        #spawn a thread to retreive the movie
+        t = threading.Thread(target=update_movie,
+                             args=[task, title_id, request]
+                             )
+        t.daemon=True
+        t.start()
+    return HttpResponseRedirect(redirect_to)
 
 @login_required
 def remote_add_episode(request,title_id):

@@ -22,13 +22,13 @@ from django.core.paginator import Paginator, InvalidPage, EmptyPage
 from django.template import RequestContext
 from django.http import Http404
 
-from mmc.mymc.models import File, Title
-from mmc.streamer.runcommand import RunCommand
+from couchtv.mymc.models import File, Title
+from couchtv.streamer.runcommand import RunCommand
 from django.contrib.auth.decorators import login_required
-from mmc.settings import *
-from mmc.mymc.views import search_titles_akas, search_file, view_title, view_file
+from couchtv.settings import *
+from couchtv.mymc.views import search_titles_akas, search_file, view_title, view_file
 from mymc.views import view_title, view_file
-from mmc.mytv.models import Pool, PoolElement, Channel, ChannelPool
+from couchtv.mytv.models import Pool, PoolElement, Channel, ChannelPool
 
 import re
 
