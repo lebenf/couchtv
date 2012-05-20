@@ -114,6 +114,30 @@ def update_movie(task,titleid, request = None):
     task.save()
     return
 
+def update_storage_files(task,storageid, request = None):
+    from mymc.management.commands.filmcrawler import FillInfo
+    pt = models.RunningTask.objects.filter(state='running', message__startswith='Updating storage')
+    if pt:
+        task.message+=" Another update running!"
+        task.state='error'
+        task.save()
+        return
+    task.pid=os.getpid()
+    task.state="running"
+    task.save()
+    stor=models.Storage.objects.get(id=storageid) 
+    try:
+        fi = FillInfo(stor)
+        fi.update()
+        fi.clean()
+    except Exception,e:
+        task.state='error'
+        task.message+=str(sys.exc_info())+str(e)
+    else:
+        task.state="done"
+    task.save()
+    return
+
 def import_episodes(task,series,episodes, request = None):
     task.pid=os.getpid()
     task.state="running"
@@ -193,8 +217,26 @@ def remote_select(request):
 
 
 @login_required
+def update_storage(request,storage_id):
+    redirect_to = request.REQUEST.get('next', '/')
+    task=models.RunningTask()
+    task.state="init"
+    task.message="Updating storage id:%s "%(storage_id)
+    task.session=request.COOKIES['sessionid']
+    task.host="localhost"
+    task.pid=0
+    task.save()
+    #spawn a thread to retreive the movie
+    t = threading.Thread(target=update_storage_files,
+                         args=[task, storage_id]
+                         )
+    t.daemon=True
+    t.start()
+    return HttpResponseRedirect(redirect_to)
+
+@login_required
 def update_title(request,title_id):
-    redirect_to = request.REQUEST.get('next', '')
+    redirect_to = request.REQUEST.get('next', '/')
     if 'I'=='I':
         task=models.RunningTask()
         task.state="init"
