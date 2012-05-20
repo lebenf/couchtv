@@ -23,7 +23,8 @@ along with MyMovieCollection. If not, see <http://www.gnu.org/licenses/>
 <tr><td>Name</td><td>Support</td><td>Size</td><td>Path</td></tr>
 {%for s in storage_list%}
 <tr>
-<td><a href="{%url mymc.views.view_storage s.id%}">{{s.name}}</a> <a href="{%url mymc.views.edit 'Storage' s.id%}">(modifica)</a></td>
+	<td><a href="{%url mymc.views.view_storage s.id%}">{{s.name}}</a> <a href="{%url mymc.views.edit 'Storage' s.id%}">(Edit)</a> 
+		<a href="{%url mymc.views.update_storage s.id%}">(Update)</a></td>
 <td>{{s.support}}</td>
 <td>{{s.size}}</td>
 <td>{{s.localpath}}</td>

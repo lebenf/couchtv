@@ -252,7 +252,8 @@ class FillInfo:
             filei.hashfile()
             #info = self.__file_extractor(lpath)
             ff = File.objects.filter(#filename = filei.name,
-                          path = filei.filepath.replace(self.path,"")
+                          path = filei.filepath.replace(self.path,""),
+                          valid = True
                           )
             if len(ff)>1:
                 raise TooManyFilesInFileError
