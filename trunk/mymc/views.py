@@ -185,7 +185,7 @@ def remote_select(request):
                 #no series just a movie
                 task=models.RunningTask()
                 task.state="init"
-                task.message="Importing movie id:%s from IMDb"%movie_id
+                task.message="Retrieving data for movie id:%s from IMDb"%movie_id
                 task.session=request.COOKIES['sessionid']
                 task.host="localhost"
                 task.pid=0
@@ -295,7 +295,7 @@ def remote_select_episode(request):
             chosen_episodes=[x for x in episode_list if str(x['movie'].getID()) in ep]
             task=models.RunningTask()
             task.state="init"
-            task.message="Importing episodes id:%s from IMDb"%str(ep)
+            task.message="Retrieving data for episodes id:%s from IMDb"%str(ep)
             task.session=request.COOKIES['sessionid']
             task.host="localhost"
             task.pid=0
