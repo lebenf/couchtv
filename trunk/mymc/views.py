@@ -171,8 +171,8 @@ def remote_select(request):
         raise Http404
     #Build choices for the form select
 ##    print request.session['remote_res']
-    movie_choices=[(x.getID(),''.join(('[tv series] ' if str(x['kind']) in ['tv series','tv mini series'] else '',
-                                    "%s (%s)"%(x['title'],x['year'])))
+    movie_choices=[(x.getID(),' '.join(('[tv series] ' if str(x['kind']) in ['tv series','tv mini series'] else '',
+                                    "%s - %s (IMDB id %s)"%(x['title'],x['year'],str(x.getID()))))
 #in (this) version of imdbpy library the "smart long imdb canonical title" is broken
                                     ) for x in request.session['remote_res']]
     error=''
