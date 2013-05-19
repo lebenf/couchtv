@@ -34,7 +34,7 @@ $("li.season_list").children("ul").toggle();
 {%block content%}
 <h1 class="title">{{title.title}}</h1>
 <h2 class="subtitle">AKA: {% for a in akas %}{{a.akatitle}}, {%endfor%}</h2>
-{%if title.type == "tv series"%}
+{%if relations_parent%}
 <div class="rightcol"><a href={%url mymc.views.remote_add_episode title.id%}>Add episode</a></div>
 <div class="rightcol"><a href={%url mytv.views.series_to_pool title.id%}>Transform in Pool</a></div>
 {%endif%}
