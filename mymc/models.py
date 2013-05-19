@@ -197,14 +197,14 @@ class UserTitle (models.Model):
 
 
 class Person(models.Model):
-    name = models.CharField(max_length=150)
-    namesort = models.CharField(max_length=150, null = True, blank=True)
+    name = models.CharField(max_length=255)
+    namesort = models.CharField(max_length=255, null = True, blank=True)
     birth = models.DateTimeField('date of birth', null = True, blank=True)
     birthstr = models.CharField(max_length=50, null = True, blank=True)
     death = models.DateTimeField('date of birth', null = True, blank=True)
     deathstr = models.CharField(max_length=50, null = True, blank=True)
     bio = models.TextField( null = True, blank=True)
-    birthname = models.CharField(max_length=150, null = True, blank=True)
+    birthname = models.CharField(max_length=255, null = True, blank=True)
     externalid = models.CharField(max_length=15, null = True, blank=True)
     source = models.CharField (max_length=1, choices=SOURCE_CHOICES, default= 'U')
     imgurl =  models.URLField( null = True, blank=True)
@@ -227,7 +227,7 @@ class Cast(models.Model):
     )
     title = models.ForeignKey(Title)
     person = models.ForeignKey(Person)
-    name = models.CharField(max_length=150,  null = True, blank=True )
+    name = models.CharField(max_length=255,  null = True, blank=True )
     role = models.CharField(max_length=1, choices=ROLE_CHOICES)
     source = models.CharField (max_length=1, choices=SOURCE_CHOICES, default= 'U')
     creation =  models.DateTimeField ( auto_now_add = True)
