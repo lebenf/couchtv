@@ -39,7 +39,7 @@ along with MyMovieCollection. If not, see <http://www.gnu.org/licenses/>
 {%if title_list%}
 <div class="pagination">
 	<span class="step-links">
-		<a alt="prima" href="?page=1;filter={{filter}}{%for g in genre%};genres={{g}}{%endfor%}">Prima</a> <span class="spacer" /> 
+		<a alt="prima" href="?page=1;filter={{filter}}{%for g in genre%};genres={{g}}{%endfor%}">First</a> <span class="spacer" /> 
 		{% if title_list.previous_ten > 0 %} 
 		<a alt="precedenti 10" href="?page={{ title_list.previous_ten }};filter={{filter}}{%for g in genre%};genres={{g}}{%endfor%}">-10</a>
 		{%else%}
@@ -65,7 +65,7 @@ along with MyMovieCollection. If not, see <http://www.gnu.org/licenses/>
 		{%else%}
 		+10
 		{%endif%}
-		<span class="spacer" /><a alt="prima" href="?page={{ title_list.paginator.num_pages }};filter={{filter}}{%for g in genre%};genres={{g}}{%endfor%}">Ultima</a>
+		<span class="spacer" /><a alt="prima" href="?page={{ title_list.paginator.num_pages }};filter={{filter}}{%for g in genre%};genres={{g}}{%endfor%}">Last</a>
 </span>
 </div>
 <div class="break"></div>
@@ -91,7 +91,7 @@ along with MyMovieCollection. If not, see <http://www.gnu.org/licenses/>
 <div class="break"></div>
 <div class="pagination">
 	<span class="step-links">
-		<a alt="prima" href="?page=1;filter={{filter}}{%for g in genre%};genres={{g}}{%endfor%}">Prima</a> <span class="spacer" /> 
+		<a alt="prima" href="?page=1;filter={{filter}}{%for g in genre%};genres={{g}}{%endfor%}">First</a> <span class="spacer" /> 
 		{% if title_list.previous_ten > 0 %} 
 		<a alt="precedenti 10" href="?page={{ title_list.previous_ten }};filter={{filter}}{%for g in genre%};genres={{g}}{%endfor%}">-10</a>
 		{%else%}
@@ -117,7 +117,7 @@ along with MyMovieCollection. If not, see <http://www.gnu.org/licenses/>
 		{%else%}
 		+10
 		{%endif%}
-		<span class="spacer" /><a alt="prima" href="?page={{ title_list.paginator.num_pages }};filter={{filter}}{%for g in genre%};genres={{g}}{%endfor%}">Ultima</a>
+		<span class="spacer" /><a alt="prima" href="?page={{ title_list.paginator.num_pages }};filter={{filter}}{%for g in genre%};genres={{g}}{%endfor%}">Last</a>
 </span>
 </div>
 {%else%}

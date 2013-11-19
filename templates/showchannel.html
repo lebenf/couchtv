@@ -21,7 +21,7 @@ along with MyMovieCollection. If not, see <http://www.gnu.org/licenses/>
 {%if channels%}
 <div class="pagination">
 	<span class="step-links">
-		<a alt="prima" href="?page=1;filter={{filter}}">Prima</a> <span class="spacer" /> 
+		<a alt="prima" href="?page=1;filter={{filter}}">First</a> <span class="spacer" /> 
 		{% if pools.previous_ten > 0 %} 
 		<a alt="precedenti 10" href="?page={{ pools.previous_ten }};filter={{filter}}">-10</a>
 		{%else%}
@@ -47,14 +47,14 @@ along with MyMovieCollection. If not, see <http://www.gnu.org/licenses/>
 		{%else%}
 		+10
 		{%endif%}
-		<span class="spacer" /><a alt="prima" href="?page={{ pools.paginator.num_pages }};filter={{filter}}">Ultima</a>
+		<span class="spacer" /><a alt="prima" href="?page={{ pools.paginator.num_pages }};filter={{filter}}">Last</a>
 </span>
 </div>
 
 <div class="itemlist">
 {%for s in channels.object_list%}
 <div class="{% cycle 'colleft' 'colright'%}">
-<div class="listitemtitle"><a href="{%url mytv.views.view_channel s.id%}">{{s.name}}</a></div> <div class="listitemelemet"><a href="{%url mytv.views.build_channel s.id%}">(modifica)</a></div>
+<div class="listitemtitle"><a href="{%url mytv.views.view_channel s.id%}">{{s.name}}</a></div> <div class="listitemelemet"><a href="{%url mytv.views.build_channel s.id%}">(edit)</a></div>
 <div class="listitemelemet">{{s.descr}}</div>
 <div><b><a href="{%url mytv.views.play_channel s.id%}">Play!</a></b> <a href="{%url mytv.views.play_channel_next s.id%}">Play next</a> <a href="{%url mytv.views.play_channel_replay s.id%}">Replay</a></div>
 </div>

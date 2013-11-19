@@ -36,11 +36,11 @@ $("li.season_list").children("ul").toggle();
 <h2 class="subtitle">AKA: {% for a in akas %}{{a.akatitle}}, {%endfor%}</h2>
 {%if relations_parent%}
 <div class="rightcol"><a href={%url mymc.views.remote_add_episode title.id%}>Add episode</a></div>
-<div class="rightcol"><a href={%url mytv.views.series_to_pool title.id%}>Transform in Pool</a></div>
+<div class="rightcol"><a href={%url mytv.views.series_to_pool title.id%}>Build a pool</a></div>
 {%endif%}
-<div class="rightcol"><a href={%url mymc.views.insert 'Relation' %}?parent_id={{ title.id }}>Add elements (episodi, etc...)</a></div>
+<div class="rightcol"><a href={%url mymc.views.insert 'Relation' %}?parent_id={{ title.id }}>Add elements</a></div>
 <div class="rightcol"><a href={%url mymc.views.insert 'Relation' %}?title_id={{ title.id }}>Add to a playlist</a></div>
-<div class="rightcol"><a href={%url mymc.views.edit 'Title' title.id%}>Modify</a></div>
+<div class="rightcol"><a href={%url mymc.views.edit 'Title' title.id%}>Edit</a></div>
 <div class="rightcol"><a href={%url mymc.views.update_title title.id%}?next={{ request.path }}>Update</a></div>
 <div class="rightcol"
 ><form action="{%url mymc.views.search_file_v%}" method="post"> 

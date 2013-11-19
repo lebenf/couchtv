@@ -33,7 +33,7 @@ along with MyMovieCollection. If not, see <http://www.gnu.org/licenses/>
 <form action="{%url mymc.views.remote_search%}" method="post">
 {{form.as_p}}
 {% csrf_token %}
-<input type="submit" value="Cerca"/>
+<input type="submit" value="Search"/>
 </form>
 
 {%endblock content%}

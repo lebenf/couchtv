@@ -20,7 +20,7 @@ along with MyMovieCollection. If not, see <http://www.gnu.org/licenses/>
 {%if pool %}<!-- not a new one -->
 		<div class="content">
 		<div class="title"> {{pool.name}}</div>
-		<div><a href="{%url mytv.views.build_pool pool.id %}">Modifica</a></div>
+		<div><a href="{%url mytv.views.build_pool pool.id %}">Edit</a></div>
 		<div><a href="{%url mytv.views.update_pool pool.id %}">Update Pool</a></div>
 		<br/>	
 		<div>Description: {{pool.descr}}</div>

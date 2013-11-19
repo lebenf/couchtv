@@ -21,7 +21,7 @@ along with MyMovieCollection. If not, see <http://www.gnu.org/licenses/>
 {%if pools%}
 <div class="pagination">
 	<span class="step-links">
-		<a alt="prima" href="?page=1;filter={{filter}}">Prima</a> <span class="spacer" /> 
+		<a alt="prima" href="?page=1;filter={{filter}}">First</a> <span class="spacer" /> 
 		{% if pools.previous_ten > 0 %} 
 		<a alt="precedenti 10" href="?page={{ pools.previous_ten }};filter={{filter}}">-10</a>
 		{%else%}
@@ -47,14 +47,14 @@ along with MyMovieCollection. If not, see <http://www.gnu.org/licenses/>
 		{%else%}
 		+10
 		{%endif%}
-		<span class="spacer" /><a alt="prima" href="?page={{ pools.paginator.num_pages }};filter={{filter}}">Ultima</a>
+		<span class="spacer" /><a alt="prima" href="?page={{ pools.paginator.num_pages }};filter={{filter}}">Last</a>
 </span>
 </div>
 
 <div class="itemlist">
 {%for s in pools.object_list%}
 <div class="{% cycle 'colleft' 'colright'%}">
-	<div class="listitemtitle"><a href="{%url mytv.views.view_pool s.id%}">{{s.name}}</a></div> <div class="listitemelemet"><a href="{%url mytv.views.build_pool s.id%}">(modifica)</a> <a href="{%url mytv.views.update_pool s.id %}">(Update)</a></div>
+	<div class="listitemtitle"><a href="{%url mytv.views.view_pool s.id%}">{{s.name}}</a></div> <div class="listitemelemet"><a href="{%url mytv.views.build_pool s.id%}">(edit)</a> <a href="{%url mytv.views.update_pool s.id %}">(Update)</a></div>
 <div class="listitemelemet">Description: {{s.descr}}</div>
 <div class="listitemelemet"><a href="{%url mytv.views.play_pool s.id%}">Play!</a> <a href="{%url mytv.views.play_pool_next s.id%}">Play next</a> <a href="{%url mytv.views.play_pool s.id%}">Replay</a></div>
 </div>

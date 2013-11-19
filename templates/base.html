@@ -72,14 +72,14 @@ along with MyMovieCollection. If not, see <http://www.gnu.org/licenses/>
 </div>
 <!--<li>{{ test_speed|safe }} </li>-->
 {% if user.is_authenticated %}
-    <div class="login">Utente: <span class="username">{{ user.username }}</span>
+    <div class="login">User: <span class="username">{{ user.username }}</span>
     (<a class="normal" href="{% url mymc.views.logout_view %}">logout</a>)</div>
 {% else %}
     <div class="login"><a class="normal" href="{% url django.contrib.auth.views.login %}?next={{ request.path }}">Login</a></div>
 {% endif %}
 <div class="search">
 <form action="{%url mymc.views.search%}" method="post">
-Cerca:
+Search:
 {% csrf_token %}
 <input type="text" name="item"/>
 </form>
