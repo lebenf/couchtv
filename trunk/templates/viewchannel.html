@@ -20,7 +20,7 @@ along with MyMovieCollection. If not, see <http://www.gnu.org/licenses/>
 {%if channel %}<!-- -->
 		<div class="content">
 		<div class="title"> {{channel.name}}</div>
-		<div><a href="{%url mytv.views.build_channel channel.id %}">Modifica</a></div>
+		<div><a href="{%url mytv.views.build_channel channel.id %}">Edit</a></div>
 		<br/>	
 		<div>Description: {{channel.descr}}</div>
 		<div>Play mode: {%if channel.playmode == 'RR'%}Random{%endif%}{%if channel.playmode == 'AS'%}Alternate{%endif%}{%if channel.playmode == 'AR'%}Alternate Continuous{%endif%}

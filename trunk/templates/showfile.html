@@ -21,7 +21,7 @@ along with MyMovieCollection. If not, see <http://www.gnu.org/licenses/>
 {%if file_list%}
 <div class="pagination">
 	<span class="step-links">
-		<a alt="prima" href="?page=1;filter={{filter}}">Prima</a> <span class="spacer" /> 
+		<a alt="prima" href="?page=1;filter={{filter}}">First</a> <span class="spacer" /> 
 		{% if file_list.previous_ten > 0 %} 
 		<a alt="precedenti 10" href="?page={{ file_list.previous_ten }};filter={{filter}}">-10</a>
 		{%else%}
@@ -47,14 +47,14 @@ along with MyMovieCollection. If not, see <http://www.gnu.org/licenses/>
 		{%else%}
 		+10
 		{%endif%}
-		<span class="spacer" /><a alt="prima" href="?page={{ file_list.paginator.num_pages }};filter={{filter}}">Ultima</a>
+		<span class="spacer" /><a alt="prima" href="?page={{ file_list.paginator.num_pages }};filter={{filter}}">Last</a>
 </span>
 </div>
 
 <div class="itemlist">
 {%for s in file_list.object_list%}
 <div class="{% cycle 'colleft' 'colright'%}">
-<div class="listitemtitle"><a href="{%url mymc.views.view_file s.id%}">{{s.filename}}</a></div> <div class="listitemelemet"><a href="{%url mymc.views.edit 'File' s.id%}">(modifica)</a></div>
+<div class="listitemtitle"><a href="{%url mymc.views.view_file s.id%}">{{s.filename}}</a></div> <div class="listitemelemet"><a href="{%url mymc.views.edit 'File' s.id%}">(edit)</a></div>
 <div class="listitemelemet">Path: {{s.path}}</div>
 <div class="listitemelemet">Storage: <a href="{%url mymc.views.view_storage s.storage.id%}">{{s.storage.name}}</a></div>
 <div class="listitemelemet">Size: {{s.size}}</div>
@@ -62,7 +62,7 @@ along with MyMovieCollection. If not, see <http://www.gnu.org/licenses/>
 	<a href="{%url mymc.views.view_title s.title.id%}">{{s.title}}</a>
 {% else %}
 <form action="{%url mymc.views.search_title%}" method="post">
-Cerca:
+Search:
 {% csrf_token %}
 	{%if s.search_keys.type == 'episode' and s.search_keys.season and s.search_keys.episode%}
 	<input type="text" name="item" value="{{ s.search_keys.keys|slice:":3"|join:" "}} s{{s.search_keys.season}} e{{s.search_keys.episode}}" />
@@ -76,7 +76,7 @@ Cerca:
 {%endfor%}
 <div class="pagination">
 	<span class="step-links">
-		<a alt="prima" href="?page=1;filter={{filter}}">Prima</a> <span class="spacer" /> 
+		<a alt="prima" href="?page=1;filter={{filter}}">First</a> <span class="spacer" /> 
 		{% if file_list.previous_ten > 0 %} 
 		<a alt="precedenti 10" href="?page={{ file_list.previous_ten }};filter={{filter}}">-10</a>
 		{%else%}
@@ -102,7 +102,7 @@ Cerca:
 		{%else%}
 		+10
 		{%endif%}
-		<span class="spacer" /><a alt="prima" href="?page={{ file_list.paginator.num_pages }};filter={{filter}}">Ultima</a>
+		<span class="spacer" /><a alt="prima" href="?page={{ file_list.paginator.num_pages }};filter={{filter}}">Last</a>
 </span>
 </div>
 
