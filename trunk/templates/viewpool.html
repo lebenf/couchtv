@@ -30,7 +30,7 @@ along with MyMovieCollection. If not, see <http://www.gnu.org/licenses/>
 			{% csrf_token %}
 			{%for pe in poolcontent %}
 			<div><input type="radio" name="elemetid" value="{{pe.id}}" onclick="$.get('/setlastelement/{{pool.id}}/{{pe.id}}');" {% if pool.lastelementplayed == pe.id %}checked="checked"{% endif %}> N.{{pe.order}}</input> 
-			{%if pe.title%}<a href="{%url mymc.views.view_title pe.title_id%}">{{pe.title.title}}</a>{%else%}<a href="{%url mymc.views.view_file pe.file_id%}">{{pe.file.filename}}</a>{%endif%}</div>
+			{%if pe.title%}<a href="{%url mymc.views.view_title_html pe.title_id%}">{{pe.title.title}}</a>{%else%}<a href="{%url mymc.views.view_file pe.file_id%}">{{pe.file.filename}}</a>{%endif%}</div>
 		{%endfor%} 
 	</form>
 		</div>  		

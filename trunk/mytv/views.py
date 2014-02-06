@@ -26,7 +26,7 @@ from couchtv.mymc.models import File, Title
 from couchtv.streamer.runcommand import RunCommand
 from django.contrib.auth.decorators import login_required
 from couchtv.settings import *
-from couchtv.mymc.views import search_titles_akas, search_file, view_title, view_file
+from mymc.views import search_titles_akas, search_file, view_title, view_file, download_file
 from mymc.views import view_title, view_file
 from couchtv.mytv.models import Pool, PoolElement, Channel, ChannelPool
 
@@ -220,6 +220,62 @@ def view_pool(request, pool_id):
     data = {'pool':p, 'poolcontent':pe}
     return render_to_response('viewpool.html', data, context_instance=RequestContext(request))
 
+
+def podcast_pool(request, pool_id):
+    p = get_object_or_404(Pool,pk=pool_id)
+    pe = PoolElement.objects.filter(pool = p)
+    pe_last = p.last_played()
+    pe = pe if not pe else pe.order_by("order")
+    last_order = pe[len(pe)-1].order
+    last_played = p.last_played()
+    pl = {'title': p.name,
+		    'pool_id':p.id,
+        'description': p.descr,
+        'link': request.build_absolute_uri(),
+        'pubDate': datetime.now().isoformat(),
+        'generator':'CouchTV V0.0.0.1',
+        'item':[],}
+    for this_pe in pe:
+        item_pe = {}
+        if this_pe.file:
+	    item_pe ['title']= this_pe.file.filename
+	    item_pe ['description']= this_pe.file.filename
+	    item_pe ['guid']= this_pe.file.full_path()
+	    item_pe ['enclosure']= this_pe.file
+	    item_pe ['poolelement']= this_pe
+	    item_pe ['pubDate']= datetime.now().isoformat()
+	    item_pe ['sortorder'] = this_pe.order+ (0 if this_pe.order > last_played.order else last_order)
+	    pl['item'].append(item_pe)
+	elif this_pe.title:
+	    files = this_pe.title.get_files()
+	    if files:
+	        item_pe ['title']= this_pe.title.title
+	        item_pe ['description']= this_pe.title.subtitle
+	        item_pe ['guid']= this_pe.title.titlesort
+	        item_pe ['poolelement']= this_pe
+	        item_pe ['enclosure']= files[0]
+	        item_pe ['pubDate']= datetime.now().isoformat()
+	        item_pe ['sortorder'] = this_pe.order+ (0 if this_pe.order > last_played.order else last_order)
+		pl['item'].append(item_pe)
+    pl['item'].sort(lambda a, b: cmp(a['sortorder'], b['sortorder']))
+    return render_to_response('podcastpool.xml', pl, context_instance=RequestContext(request))
+
+def play_pool_element(request, pool_elem):
+    pe = get_object_or_404(PoolElement,pk=pool_elem)
+    pe.pool.lastelementplayed = pe.id
+    pe.pool.save()
+    pe.lastplayed = datetime.now()
+    pe.save()
+ 
+    if pe.file:
+        return HttpResponseRedirect(reverse(download_file,args=[pe.file.id]))
+    elif pe.title:
+	files = pe.title.get_files()
+	for f in files:
+	    if f.valid:
+                return HttpResponseRedirect(reverse(download_file,args=[f.id]))
+    raise Http404
+    
 
 def __paginator(request, itemlist, length = 20):
     paginator = Paginator(itemlist, length)

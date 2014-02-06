@@ -23,7 +23,7 @@ New titles:
 	{%for s in last_titles%}
 	{%with s.get_series_title as parent%}
 	{%if s %}<div class="titleitem {% cycle 'tcolleft' 'tcolcenter' 'tcolright' %}">
-<a href="{%url mymc.views.view_title s.id%}">
+<a href="{%url mymc.views.view_title_html s.id%}">
 {% if s.cover %}
 <img class="cover small" src="{{s.cover.url}}"/>
 {%else%}
@@ -33,8 +33,8 @@ New titles:
 	<img class="cover small" src="{{MEDIA_URL}}img/Film_Reel.png"/>
 	{%endif%}
 {%endif%}</a>
-<div class="listitemtitle">{% if s.is_episode %}[ <a href="{% url mymc.views.view_title parent.id %}">{{parent.title}}</a> ] {%endif%}
-	<a href="{%url mymc.views.view_title s.id%}">{{s.title}} ({{s.year}})
+<div class="listitemtitle">{% if s.is_episode %}[ <a href="{% url mymc.views.view_title_html parent.id %}">{{parent.title}}</a> ] {%endif%}
+	<a href="{%url mymc.views.view_title_html s.id%}">{{s.title}} ({{s.year}})
 </a></div>
 </div>
 {%endif%}

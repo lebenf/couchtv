@@ -17,7 +17,7 @@ __copyright__ = "Copyright 2010,  Lorenzo Benfenati, Andrea Zucchelli"
 __license__ = "AGPL v3"
 
 import threading
-import os
+import os, json
 import sys, re
 
 from django.http import HttpResponse, HttpResponseRedirect, HttpResponseNotFound
@@ -32,6 +32,7 @@ from django.contrib.auth import logout
 from django.core.servers.basehttp import FileWrapper
 from django.db.models import Avg, Max, Min, Count
 from django.contrib.sites.models import RequestSite
+from django.core import serializers
 import mymc.imdbtools as imdbtools
 from mymc.forms import remote_search_form, remote_select_form, remote_select_episodes, \
                         search_form, storage_form, file_form
@@ -400,7 +401,18 @@ def view_title(request,title_id):
           'actors':actors,
           'akas':akas
           }
-    return render_to_response('viewtitle.html',data,context_instance=RequestContext(request))
+    return data 
+
+def view_title_html(request, title_id):
+    return render_to_response('viewtitle.html',
+		    view_title(request, title_id),
+		    context_instance=RequestContext(request)
+		    )
+
+def view_title_api(request, title_id):
+    resp = serializers.serialize('json',view_title(request, title_id))
+    print resp
+    return HttpResponse(resp,  content_type="application/json")
 
 def view_file(request,file_id):
     fileo=get_object_or_404(models.File,pk=file_id)
@@ -415,6 +427,9 @@ def download_file(request,file_id):
     fileo=get_object_or_404(models.File,pk=file_id)
     if not fileo.valid:
         return Http404
+    if DOWNLOAD_PREFIX:
+	import urllib
+        return HttpResponseRedirect("%s%s/%s"%(DOWNLOAD_PREFIX,fileo.storage.id,urllib.quote(fileo.path)))
     mime, encoding = mimetypes.guess_type( fileo.full_path())
     resp = HttpResponse(FileWrapper(file(fileo.full_path() )), 
                         mimetype = mime if mime else 'application/octet-stream' )
@@ -441,7 +456,7 @@ def view_person(request,person_id):
           }
     return render_to_response('viewperson.html',data,context_instance=RequestContext(request))
 
-def search(request):
+def search_rest(request):
     if request.method!='POST':
         raise Http404
     f=search_form(request.POST)
@@ -452,9 +467,9 @@ def search(request):
         #search for person
         q=utils.get_query(item,['namesort'])
         people=[x for x in models.Person.objects.filter(q)]
-        q=utils.get_query(item,['filename'])
-        files=[x for x in models.File.objects.filter(q)]
-        
+        #q=utils.get_query(item,['filename'])
+        #files=[x for x in models.File.objects.filter(q)]
+        files = search_file(item)
         if not request.user.is_anonymous():
             q=utils.get_query(item,['tag'])
             tagtits = [x.title for x in models.UserTitle.objects.filter(user=request.user, 
@@ -463,10 +478,13 @@ def search(request):
                     ]
             titles=titles+tagtits
         data={'titles':set(titles),'people':set(people), 'files':set(files)}
-        return render_to_response('showresult.html',data,context_instance=RequestContext(request))
     else:
         data={'titles':None,'people':None, 'files':None}
-        return render_to_response('showresult.html',data,context_instance=RequestContext(request))
+    return data
+
+def search(request):
+    data = search_rest(request)
+    return render_to_response('showresult.html',data,context_instance=RequestContext(request))
 
 def search_title(request):
     #Search for a title: used in view_file to find the associated title
@@ -710,7 +728,7 @@ def search_file(searchstr):
     if not searchstr:
         return []
     q=utils.get_query(searchstr,['filename','path'])
-    return [x for x in models.File.objects.filter(q).order_by("filename")]
+    return [x for x in models.File.objects.filter(valid=True).filter(q).order_by("filename")]
 
 def search_titles_akas (searchstr):
     def __get_season_episode(search):

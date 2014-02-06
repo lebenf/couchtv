@@ -59,7 +59,7 @@ along with MyMovieCollection. If not, see <http://www.gnu.org/licenses/>
 <div class="listitemelemet">Storage: <a href="{%url mymc.views.view_storage s.storage.id%}">{{s.storage.name}}</a></div>
 <div class="listitemelemet">Size: {{s.size}}</div>
 <div class="listitemelemet">Title: {% if s.title %}
-	<a href="{%url mymc.views.view_title s.title.id%}">{{s.title}}</a>
+	<a href="{%url mymc.views.view_title_html s.title.id%}">{{s.title}}</a>
 {% else %}
 <form action="{%url mymc.views.search_title%}" method="post">
 Search:

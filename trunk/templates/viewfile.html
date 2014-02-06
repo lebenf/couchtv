@@ -19,7 +19,7 @@ along with MyMovieCollection. If not, see <http://www.gnu.org/licenses/>
 {%block content%}
 {%if file.title %}
 <div class="title"> 
-<a href="{% url mymc.views.view_title file.title_id %}">{{file.title.title}}</a>
+<a href="{% url mymc.views.view_title_html file.title_id %}">{{file.title.title}}</a>
 </div>
 {%else%}
 <div class="title">{{file.filename}}</div>
@@ -29,7 +29,7 @@ along with MyMovieCollection. If not, see <http://www.gnu.org/licenses/>
 <div class="listitemelement" >({{file.path}})</div>
 <div class="listitemelement" ><a href="{%url mymc.views.download_file file.id%}">Download</a></div> <div class="spacer"></div>
 <div class="listitemelement" ><a href="{%url mymc.views.playlist file.id%}">Play</a></div> <div class="spacer"></div>
-<div >Storage: <a href="{% url mymc.views.view_title file.storage_id %}">{{file.storage}}</a></div>
+<div >Storage: <a href="{% url mymc.views.view_title_html file.storage_id %}">{{file.storage}}</a></div>
 <div class="listitemelement" >Size: {{file.size}}</a></div>
 <div  class="listitemelement">Hash: {{file.hash}}</a></div>
 <div  class="listitemelement">Hashtype: {{file.hashtype}}</a></div>
@@ -42,8 +42,7 @@ along with MyMovieCollection. If not, see <http://www.gnu.org/licenses/>
 <div class="colleft70">
 	<div>{%if file.container == "AVI "%}
 		<!--<object data="{%url mymc.views.download_file file.id%}" type="video/avi" /> -->
-		{%else%}
-		<video src="{% if prefix %}{{prefix}}{{file.storage.id}}{{file.path|iriencode}}{%else%}http://{{site_name}}{%url mymc.views.download_file file.id%}{%endif%}" controls="controls"></video> 
+		<video src="{% if prefix %}{{prefix}}{{file.storage.id}}/{{file.path|iriencode}}{%else%}http://{{site_name}}{%url mymc.views.download_file file.id%}{%endif%}" controls="controls"></video> 
 		{%endif%}
 	</div>
 <div><a href="{%url streamer.views.stream_file file.id%}" >Start streaming</a></div>

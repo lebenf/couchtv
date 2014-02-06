@@ -56,7 +56,7 @@ along with MyMovieCollection. If not, see <http://www.gnu.org/licenses/>
 <div class="{% cycle 'colleft' 'colright'%}">
 	<div class="listitemtitle"><a href="{%url mytv.views.view_pool s.id%}">{{s.name}}</a></div> <div class="listitemelemet"><a href="{%url mytv.views.build_pool s.id%}">(edit)</a> <a href="{%url mytv.views.update_pool s.id %}">(Update)</a></div>
 <div class="listitemelemet">Description: {{s.descr}}</div>
-<div class="listitemelemet"><a href="{%url mytv.views.play_pool s.id%}">Play!</a> <a href="{%url mytv.views.play_pool_next s.id%}">Play next</a> <a href="{%url mytv.views.play_pool s.id%}">Replay</a></div>
+<div class="listitemelemet"><a href="{%url mytv.views.play_pool s.id%}">Play!</a> <a href="{%url mytv.views.play_pool_next s.id%}">Play next</a> <a href="{%url mytv.views.play_pool s.id%}">Replay</a ><a href="{%url mytv.views.podcast_pool s.id%}">Podcast</a></div>
 </div>
 {%endfor%}
 

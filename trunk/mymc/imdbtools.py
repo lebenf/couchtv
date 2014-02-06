@@ -226,10 +226,10 @@ class IMDBtools:
 #            runtime = None
         #print sresult.get('color info')
         title = sresult.get('episode title',"").encode('utf-8') if not( sresult.get('episode title',"") and sresult['kind']=='episode') else sresult.get('title',"??").encode('utf-8')
-        t = Title(title = sresult.get('title',"??").encode('utf-8'),
+        t = Title(title = sresult.get('title',"??").encode('utf-8')[:255],
             year = listdilemma(sresult.get('year', None)),
             type = listdilemma(sresult.get('kind', None)),
-            titlesort = listdilemma(sresult.get('canonical title', None)),
+            titlesort = listdilemma(sresult.get('canonical title', ""))[:255],
             #aka = "; ".join(sresult.get('akas', None)),
             externalid = sresult.movieID,
             source = 'I',
@@ -322,7 +322,7 @@ class IMDBtools:
         akp = Aka.objects.filter(title=titleid.id, akatitle=aka)
         if akp:
             return akp[0]
-        akn = Aka (title = titleid, akatitle = aka)
+        akn = Aka (title = titleid, akatitle = aka[:255])
         akn.save()
         return akn
 
@@ -393,12 +393,12 @@ class IMDBtools:
             except:
                 raise
         act = Person(
-            name = pers.get('name', None),
-            namesort = pers.get('canonical name', None),
+            name = pers.get('name', "")[:255],
+            namesort = pers.get('canonical name', "")[:255],
             birthstr = pers.get('birth date', None) ,
             deathstr = pers.get('death date', None),
             bio = listdilemma(pers.get('mini biography', None)),
-            birthname = pers.get('birth name', None),
+            birthname = pers.get('birth name', "")[:255],
             externalid = pers.personID,
             source = 'I',
             imgurl = pers.get('headshot', None),
