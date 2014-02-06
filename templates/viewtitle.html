@@ -124,7 +124,7 @@ Search file:
 {%if relations_member%}
 	{%for r in relations_member%}
 		{% if r.relation == 'T' %}
-		  <div class="item">Serie</div><div class="itemcontent"> <a href="{% url mymc.views.view_title r.parent.id %}">{{r.parent.title}}</a></div>
+		  <div class="item">Serie</div><div class="itemcontent"> <a href="{% url mymc.views.view_title_html r.parent.id %}">{{r.parent.title}}</a></div>
 		{%endif%}
 	{%endfor%}
 {%endif%}
@@ -138,7 +138,7 @@ Search file:
         <li class="season_list">Season {{ s }}
             <ul>
                 {% for i in slist|dictsort:"tvepisode" %}
-		<li><a href="{% url mymc.views.view_title i.title.id %}" class="daddy">{%if i.tvepisode%}S{{i.tvseason}}E{{i.tvepisode}} {%endif%}{{i.title.title}}</a> <a href="{%url mymc.views.update_title i.title.id%}?next={{ request.path }}">(Update)</a></li>
+		<li><a href="{% url mymc.views.view_title_html i.title.id %}" class="daddy">{%if i.tvepisode%}S{{i.tvseason}}E{{i.tvepisode}} {%endif%}{{i.title.title}}</a> <a href="{%url mymc.views.update_title i.title.id%}?next={{ request.path }}">(Update)</a></li>
                 {% endfor%}
             </ul>
         </li>
@@ -148,7 +148,7 @@ Search file:
 {%else%}    
 <div class="itemcontent">  
   {%for r in relations_parent%}
-<div><a href="{% url mymc.views.view_title r.title.id %}">{{r.title.title}}</a></div>
+<div><a href="{% url mymc.views.view_title_html r.title.id %}">{{r.title.title}}</a></div>
   {%endfor%}
 </div>
 {%endif%}

@@ -36,7 +36,7 @@ Characters:
 </div>
 <dl class="itemcontent characters">
 {%for p in actor_for%}
-<dd>{{p.name}} : <a href="{% url mymc.views.view_title p.title_id%}">{{p.title.title}}</a></dd>
+<dd>{{p.name}} : <a href="{% url mymc.views.view_title_html p.title_id%}">{{p.title.title}}</a></dd>
 {%endfor%}
 </dl>
 {%endif%}
@@ -46,7 +46,7 @@ Director:
 </div>
 <dl class="itemcontent director">
 {%for p in director_for%}
-<dd><a href="{% url mymc.views.view_title p.title_id%}">{{p.title.title}}</a></dd>
+<dd><a href="{% url mymc.views.view_title_html p.title_id%}">{{p.title.title}}</a></dd>
 {%endfor%}
 </dl>
 {%endif%}

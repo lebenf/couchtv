@@ -72,7 +72,7 @@ along with MyMovieCollection. If not, see <http://www.gnu.org/licenses/>
 <div class="titlelist">
 {%for s in title_list.object_list%}
 <div class="titleitem {% cycle 'colleft' 'colright' %}">
-<a href="{%url mymc.views.view_title s.id%}">
+<a href="{%url mymc.views.view_title_html s.id%}">
 {% if s.cover %}
 <img class="cover" src="{{s.cover.url}}"/>
 {%else%}
@@ -82,7 +82,7 @@ along with MyMovieCollection. If not, see <http://www.gnu.org/licenses/>
         <img class="cover small" src="{{MEDIA_URL}}img/Film_Reel.png"/>
 	{%endif%}
 	{%endif%}</a>
- <div class="listitemtitle"><a href="{%url mymc.views.view_title s.id%}">{{s.title}} ({{s.year}})
+ <div class="listitemtitle"><a href="{%url mymc.views.view_title_html s.id%}">{{s.title}} ({{s.year}})
  </a> <a href="{%url mymc.views.update_title s.id%}?next={{ request.path }}">(Update)</a> </div>
 </div>
 {%endfor%}

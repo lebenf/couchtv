@@ -3,7 +3,7 @@
 	<title>Video</title>
 	<trackList>
 		<track>
-			<location>{% if prefix %}{{prefix}}{{file.storage.id}}{{file.path|iriencode}}{%else%}http://{{site_name}}{%url mymc.views.download_file file.id%}{%endif%}</location>
+			<location>{% if prefix %}{{prefix}}{{file.storage.id}}/{{file.path|iriencode}}{%else%}http://{{site_name}}{%url mymc.views.download_file file.id%}{%endif%}</location>
 			<extension application="http://www.videolan.org/vlc/playlist/0">
 				<vlc:id>0</vlc:id>
 			</extension>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss 
+	xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd"
+	xmlns:podbridge="http:www.podbridge.com/podbridge-ad.dtd" version="2.0">
+	<channel>
+		<title>{{title}}</title>
+		<description>{{description}}</description>
+		<link>{{link}}</link>
+		<language>en-US</language>
+		<copyright>Copyright &#xA9; 2014 couchTV</copyright>
+		<!--image>
+			<title></title>
+			<url></url>
+			<link></link>
+		</image-->
+		<pubDate>{{pubDate}}</pubDate>
+		<generator>{{generator}}</generator>
+		{%for i in item%}		
+		<item>
+			<title>{{i.title}}</title>
+			<description>{{i.description}} {{i.sortorder}}</description>
+			<guid>http://{{ request.META.HTTP_HOST }}{%url mytv.views.play_pool_element i.poolelement.id%}</guid>
+			<enclosure url="http://{{ request.META.HTTP_HOST }}{%url mytv.views.play_pool_element i.poolelement.id%}" length="{{i.enclosure.size}}" type="video/mpg"></enclosure>
+			<pubDate>{{i.pubDate}}</pubDate>
+		</item>
+		{%endfor%}
+	</channel>
+</rss>
+
